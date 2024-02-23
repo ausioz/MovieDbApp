@@ -24,6 +24,7 @@ class MovieByGenreListAdapter :
             binding.cardMovie.setOnClickListener {
                 val intent = Intent(itemView.context, MovieDetailActivity::class.java)
                 intent.putExtra(EXTRA_MOVIE, movie.id)
+                intent.putExtra(EXTRA_MOVIE_TITLE, movie.title)
                 itemView.context.startActivity(intent)
             }
         }
@@ -47,6 +48,7 @@ class MovieByGenreListAdapter :
     companion object {
 
         const val EXTRA_MOVIE = "movieId"
+        const val EXTRA_MOVIE_TITLE = "movieTitle"
 
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ResultsItem>() {
             override fun areItemsTheSame(oldItem: ResultsItem, newItem: ResultsItem): Boolean {

@@ -35,6 +35,9 @@ class MovieDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         extraMovieId = intent.getIntExtra(MovieByGenreListAdapter.EXTRA_MOVIE, 0)
+        val extraMovieName = intent.getStringExtra(MovieByGenreListAdapter.EXTRA_MOVIE_TITLE)
+
+        supportActionBar?.title = extraMovieName
 
         binding.rvReview.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false

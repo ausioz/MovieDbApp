@@ -28,7 +28,8 @@ class MovieByGenreActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         extraGenreId = intent.getIntExtra(MainPagerAdapter.EXTRA_GENRE, 0)
-
+        val extraGenreName = intent.getStringExtra(MainPagerAdapter.EXTRA_GENRE_NAME)
+        supportActionBar?.title = "Movies Genre : $extraGenreName"
         binding.recyclerView.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false
         )

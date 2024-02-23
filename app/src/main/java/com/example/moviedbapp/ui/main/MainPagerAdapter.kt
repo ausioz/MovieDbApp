@@ -20,6 +20,7 @@ class MainPagerAdapter : ListAdapter<GenresItem, MainPagerAdapter.ViewHolder>(DI
             binding.cardGenre.setOnClickListener {
                 val intent = Intent(itemView.context, MovieByGenreActivity::class.java)
                 intent.putExtra(EXTRA_GENRE, genre.id)
+                intent.putExtra(EXTRA_GENRE_NAME, genre.name)
                 itemView.context.startActivity(intent)
             }
         }
@@ -39,6 +40,8 @@ class MainPagerAdapter : ListAdapter<GenresItem, MainPagerAdapter.ViewHolder>(DI
 
     companion object {
         const val EXTRA_GENRE = "genreId"
+        const val  EXTRA_GENRE_NAME = "genreName"
+
 
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<GenresItem>() {
             override fun areItemsTheSame(
