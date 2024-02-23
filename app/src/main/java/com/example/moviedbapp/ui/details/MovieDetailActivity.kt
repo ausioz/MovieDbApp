@@ -6,19 +6,20 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.moviedbapp.ViewModelFactory
-import com.example.moviedbapp.data.response.ResultsItem
+import com.example.moviedbapp.data.paging.LoadingStateAdapter
+import com.example.moviedbapp.data.paging.movie.MovieByGenreListAdapter
+import com.example.moviedbapp.data.paging.review.UserReviewListAdapter
 import com.example.moviedbapp.data.response.ReviewResultsItem
 import com.example.moviedbapp.databinding.ActivityMovieDetailBinding
 import com.example.moviedbapp.ui.MovieViewModel
 import com.example.moviedbapp.ui.cutomview.LoadingDialogFragment
-import com.example.moviedbapp.ui.main.MainPagerAdapter
-import com.example.moviedbapp.ui.movielist.MovieByGenrePagerAdapter
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import kotlinx.coroutines.flow.collectLatest
 
 class MovieDetailActivity : AppCompatActivity() {
 
@@ -27,15 +28,16 @@ class MovieDetailActivity : AppCompatActivity() {
     private val viewModel by viewModels<MovieViewModel> {
         ViewModelFactory.getInstance(this)
     }
-    private lateinit var reviewPagerAdapter: ReviewPagerAdapter
+    private lateinit var userReviewListAdapter: UserReviewListAdapter
     private val loadingDialog = LoadingDialogFragment()
+    private var extraMovieId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMovieDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val extraMovieId = intent.getIntExtra(MovieByGenrePagerAdapter.EXTRA_MOVIE, 0)
+        extraMovieId = intent.getIntExtra(MovieByGenreListAdapter.EXTRA_MOVIE, 0)
 
         binding.rvReview.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false
@@ -44,7 +46,8 @@ class MovieDetailActivity : AppCompatActivity() {
 
         viewModel.getMovieDetail(extraMovieId)
         viewModel.getVideoKey(extraMovieId)
-        viewModel.getReview(extraMovieId)
+        getReviewData()
+
 
         viewModel.isLoading.observe(this) {
             showLoading(it)
@@ -55,13 +58,9 @@ class MovieDetailActivity : AppCompatActivity() {
         }
 
         viewModel.movieDetail.observe(this) { detail ->
-            Glide.with(this)
-                .load(BASE_IMG_URL + detail.posterPath)
-                .into(binding.ivPosterDetail)
+            Glide.with(this).load(BASE_IMG_URL + detail.posterPath).into(binding.ivPosterDetail)
 
-            Glide.with(this)
-                .load(BASE_IMG_URL + detail.backdropPath)
-                .into(binding.ivBackdrop)
+            Glide.with(this).load(BASE_IMG_URL + detail.backdropPath).into(binding.ivBackdrop)
 
             binding.tvVoteCount.text = detail.voteCount.toString()
             val voteRating = detail.voteAverage
@@ -89,24 +88,34 @@ class MovieDetailActivity : AppCompatActivity() {
                         binding.ivBackdrop.visibility = View.GONE
                         youTubePlayer.loadVideo(it, 0F)
                     } else Toast.makeText(
-                        this@MovieDetailActivity,
-                        "Official Trailer not found",
-                        Toast.LENGTH_SHORT
+                        this@MovieDetailActivity, "Official Trailer not found", Toast.LENGTH_SHORT
                     ).show()
                 }
             })
         }
 
-        viewModel.movieReview.observe(this) {
-            setData(it.results)
+    }
+
+    private fun getReviewData() {
+        userReviewListAdapter = UserReviewListAdapter()
+        binding.rvReview.adapter =
+            userReviewListAdapter.withLoadStateFooter(footer = LoadingStateAdapter {
+                userReviewListAdapter.retry()
+            })
+        userReviewListAdapter.addLoadStateListener { loadState ->
+            binding.rvReview.adapter?.apply {
+                if (itemCount <= 0 && !loadState.source.refresh.endOfPaginationReached) {
+                    binding.tvNoReview.visibility = View.VISIBLE
+                } else {
+                    binding.tvNoReview.visibility = View.GONE
+                }
+            }
+        }
+        viewModel.getReview(extraMovieId).observe(this) {
+            userReviewListAdapter.submitData(lifecycle, it)
         }
     }
 
-    private fun setData(list: List<ReviewResultsItem?>?) {
-        reviewPagerAdapter = ReviewPagerAdapter()
-        reviewPagerAdapter.submitList(list)
-        binding.rvReview.adapter = reviewPagerAdapter
-    }
 
     private fun showError(errorMsg: String?) {
         Toast.makeText(this, "Error! \n$errorMsg", Toast.LENGTH_SHORT).show()

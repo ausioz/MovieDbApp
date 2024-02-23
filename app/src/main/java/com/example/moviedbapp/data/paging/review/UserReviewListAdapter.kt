@@ -1,24 +1,28 @@
-package com.example.moviedbapp.ui.details
+package com.example.moviedbapp.data.paging.review
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.moviedbapp.data.response.GenresItem
 import com.example.moviedbapp.data.response.ReviewResultsItem
-import com.example.moviedbapp.databinding.ItemGenreBinding
 import com.example.moviedbapp.databinding.ItemReviewBinding
-import com.example.moviedbapp.ui.movielist.MovieByGenreActivity
 
+class UserReviewListAdapter :
+    PagingDataAdapter<ReviewResultsItem, UserReviewListAdapter.ViewHolder>(DIFF_CALLBACK) {
 
-class ReviewPagerAdapter : ListAdapter<ReviewResultsItem, ReviewPagerAdapter.ViewHolder>(DIFF_CALLBACK) {
-    inner class ViewHolder(private val binding: ItemReviewBinding) :
+    class ViewHolder(private val binding: ItemReviewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(review: ReviewResultsItem) {
             binding.tvUser.text = review.author
             binding.tvReview.text = review.content
+        }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val data = getItem(position)
+        if (data != null) {
+            holder.bind(data)
         }
     }
 
@@ -30,11 +34,8 @@ class ReviewPagerAdapter : ListAdapter<ReviewResultsItem, ReviewPagerAdapter.Vie
         )
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-
     companion object {
+
         val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ReviewResultsItem>() {
             override fun areItemsTheSame(
                 oldItem: ReviewResultsItem, newItem: ReviewResultsItem

@@ -4,12 +4,16 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.moviedbapp.data.MovieRepository
 import com.example.moviedbapp.data.response.DiscoverMovieResponse
 import com.example.moviedbapp.data.response.GenresItem
 import com.example.moviedbapp.data.response.MovieDetailResponse
 import com.example.moviedbapp.data.response.MovieGenreResponse
 import com.example.moviedbapp.data.response.ResultsItem
+import com.example.moviedbapp.data.response.ReviewResultsItem
 import com.example.moviedbapp.data.response.UserReviewResponse
 import com.example.moviedbapp.data.response.VideoResponse
 import retrofit2.Call
@@ -27,14 +31,11 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
     private val _listGenre = MutableLiveData<MovieGenreResponse>()
     val listGenre: LiveData<MovieGenreResponse> = _listGenre
 
-    private val _listMovieByGenre = MutableLiveData<DiscoverMovieResponse>()
-    val listMovieByGenre: LiveData<DiscoverMovieResponse> = _listMovieByGenre
-
     private val _movieDetail = MutableLiveData<MovieDetailResponse>()
     val movieDetail: LiveData<MovieDetailResponse> = _movieDetail
 
-    private val _movieReview = MutableLiveData<UserReviewResponse>()
-    val movieReview: LiveData<UserReviewResponse> = _movieReview
+//    private val _movieReview = MutableLiveData<UserReviewResponse>()
+//    val movieReview: LiveData<UserReviewResponse> = _movieReview
 
     private val _videoKey = MutableLiveData<String?>()
     val videoKey: LiveData<String?> = _videoKey
@@ -67,32 +68,8 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
         })
     }
 
-    fun getMoviesByGenre(genreId: Int) {
-        _isLoading.value = true
-        val client = repository.getMoviesByGenre(genreId)
-        client.enqueue(object : Callback<DiscoverMovieResponse> {
-            override fun onResponse(
-                call: Call<DiscoverMovieResponse>, response: Response<DiscoverMovieResponse>
-            ) {
-                if (response.isSuccessful) {
-                    if (response.body() != null) {
-                        _isLoading.value = false
-                        _listMovieByGenre.value = response.body()
-                    }
-                } else {
-                    _isLoading.value = false
-                    _errorMsg.value = response.message()
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<DiscoverMovieResponse>, t: Throwable) {
-                _isLoading.value = false
-                _errorMsg.value = t.message
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-
-        })
+    fun getMoviesByGenre(genreId: Int) : LiveData<PagingData<ResultsItem>> {
+        return repository.getMoviesByGenre(genreId).cachedIn(viewModelScope)
     }
 
     fun getMovieDetail(movieId: Int) {
@@ -123,33 +100,8 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
         })
     }
 
-    fun getReview(movieId: Int){
-        _isLoading.value = true
-        val client = repository.getReviews(movieId)
-        client.enqueue(object : Callback<UserReviewResponse>{
-            override fun onResponse(
-                call: Call<UserReviewResponse>,
-                response: Response<UserReviewResponse>
-            ) {
-                if (response.isSuccessful) {
-                    if (response.body() != null) {
-                        _isLoading.value = false
-                       _movieReview.value = response.body()
-                    }
-                } else {
-                    _isLoading.value = false
-                    _errorMsg.value = response.message()
-                    Log.e(TAG, "onFailure: ${response.message()}")
-                }
-            }
-
-            override fun onFailure(call: Call<UserReviewResponse>, t: Throwable) {
-                _isLoading.value = false
-                _errorMsg.value = t.message
-                Log.e(TAG, "onFailure: ${t.message}")
-            }
-
-        })
+    fun getReview(movieId: Int) :LiveData<PagingData<ReviewResultsItem>>{
+        return repository.getReviews(movieId).cachedIn(viewModelScope)
     }
 
     fun getVideoKey(movieId: Int){

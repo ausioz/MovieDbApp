@@ -6,7 +6,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moviedbapp.ViewModelFactory
-import com.example.moviedbapp.data.response.ResultsItem
+import com.example.moviedbapp.data.paging.LoadingStateAdapter
+import com.example.moviedbapp.data.paging.movie.MovieByGenreListAdapter
 import com.example.moviedbapp.databinding.ActivityMovieByGenreBinding
 import com.example.moviedbapp.ui.MovieViewModel
 import com.example.moviedbapp.ui.cutomview.LoadingDialogFragment
@@ -20,42 +21,33 @@ class MovieByGenreActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
 
-    private lateinit var movieByGenrePagerAdapter: MovieByGenrePagerAdapter
+    private lateinit var movieByGenreListAdapter: MovieByGenreListAdapter
 
     private val loadingDialog = LoadingDialogFragment()
-
+    private var extraGenreId = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMovieByGenreBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val extraGenreId = intent.getIntExtra(MainPagerAdapter.EXTRA_GENRE,0)
+        extraGenreId = intent.getIntExtra(MainPagerAdapter.EXTRA_GENRE, 0)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(
             this, LinearLayoutManager.VERTICAL, false
         )
 
-        viewModel.getMoviesByGenre(extraGenreId)
-
-        viewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-
-        viewModel.errorMsg.observe(this) {
-            showError(it)
-        }
-
-        viewModel.listMovieByGenre.observe(this) {
-            setData(it.results)
-        }
-
-
+        getData()
     }
 
-    private fun setData(list: List<ResultsItem?>?) {
-        movieByGenrePagerAdapter = MovieByGenrePagerAdapter()
-        movieByGenrePagerAdapter.submitList(list)
-        binding.recyclerView.adapter = movieByGenrePagerAdapter
+    private fun getData() {
+        movieByGenreListAdapter = MovieByGenreListAdapter()
+        binding.recyclerView.adapter = movieByGenreListAdapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                movieByGenreListAdapter.retry()
+            })
+        viewModel.getMoviesByGenre(extraGenreId).observe(this) {
+            movieByGenreListAdapter.submitData(lifecycle, it)
+        }
     }
 
     private fun showError(errorMsg: String?) {

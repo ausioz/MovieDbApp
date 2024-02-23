@@ -4,9 +4,11 @@ import com.example.moviedbapp.BuildConfig
 import com.example.moviedbapp.data.response.DiscoverMovieResponse
 import com.example.moviedbapp.data.response.MovieDetailResponse
 import com.example.moviedbapp.data.response.MovieGenreResponse
+import com.example.moviedbapp.data.response.ResultsItem
 import com.example.moviedbapp.data.response.UserReviewResponse
 import com.example.moviedbapp.data.response.VideoResponse
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -17,9 +19,10 @@ interface ApiService {
     fun getGenres(): Call<MovieGenreResponse>
 
     @GET("discover/movie")
-    fun getMoviesByGenre(
+    suspend fun getMoviesByGenre(
         @Query("with_genres") id: Int,
-    ): Call<DiscoverMovieResponse>
+        @Query("page") page: Int,
+    ): DiscoverMovieResponse
 
     @GET("movie/{movie_id}")
     fun getMovieDetail(
@@ -32,9 +35,10 @@ interface ApiService {
     ): Call<VideoResponse>
 
     @GET("movie/{movie_id}/reviews")
-    fun getReviews(
-        @Path("movie_id") id: Int
-    ): Call<UserReviewResponse>
+    suspend fun getReviews(
+        @Path("movie_id") id: Int,
+        @Query("page") page: Int,
+    ): UserReviewResponse
 
 
 }
