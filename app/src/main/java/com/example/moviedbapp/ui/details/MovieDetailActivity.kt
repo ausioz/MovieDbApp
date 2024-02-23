@@ -16,6 +16,7 @@ import com.example.moviedbapp.ui.MovieViewModel
 import com.example.moviedbapp.ui.cutomview.LoadingDialogFragment
 import com.example.moviedbapp.ui.main.MainPagerAdapter
 import com.example.moviedbapp.ui.movielist.MovieByGenrePagerAdapter
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 
@@ -53,7 +54,7 @@ class MovieDetailActivity : AppCompatActivity() {
             showError(it)
         }
 
-        viewModel.movieDetail.observe(this) {detail ->
+        viewModel.movieDetail.observe(this) { detail ->
             Glide.with(this)
                 .load(BASE_IMG_URL + detail.posterPath)
                 .into(binding.ivPosterDetail)
@@ -65,7 +66,8 @@ class MovieDetailActivity : AppCompatActivity() {
             binding.tvVoteCount.text = detail.voteCount.toString()
             val voteRating = detail.voteAverage
             val ratingInFloat = String.format("%.1f", voteRating)
-            binding.tvRatingResult.text = ratingInFloat
+            binding.tvRatingResult.text = ": $ratingInFloat"
+            binding.tvLanguage.text = "Language : ${detail.spokenLanguages?.get(0)?.englishName}"
             binding.tvDescriptionMS.text = detail.overview
             binding.tvTitleDetail.text = detail.title
             binding.tvRelease.text = "Release : ${detail.releaseDate}"
@@ -79,17 +81,23 @@ class MovieDetailActivity : AppCompatActivity() {
         }
 
         lifecycle.addObserver(binding.ytTrailer)
-        viewModel.videoKey.observe(this){
-            binding.ytTrailer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener(){
+        viewModel.videoKey.observe(this) {
+            binding.ytTrailer.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                 override fun onReady(youTubePlayer: YouTubePlayer) {
                     super.onReady(youTubePlayer)
-                    if (!it.isNullOrEmpty()) binding.ivBackdrop.visibility = View.GONE
-                    youTubePlayer.loadVideo(it!!,0F)
+                    if (!it.isNullOrEmpty()) {
+                        binding.ivBackdrop.visibility = View.GONE
+                        youTubePlayer.loadVideo(it, 0F)
+                    } else Toast.makeText(
+                        this@MovieDetailActivity,
+                        "Official Trailer not found",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
         }
 
-        viewModel.movieReview.observe(this){
+        viewModel.movieReview.observe(this) {
             setData(it.results)
         }
     }
