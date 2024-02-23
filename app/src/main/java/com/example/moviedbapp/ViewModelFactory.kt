@@ -1,6 +1,5 @@
 package com.example.moviedbapp
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.moviedbapp.data.MovieRepository
@@ -23,10 +22,10 @@ class ViewModelFactory(private val repository: MovieRepository) :
     }
 
     companion object {
-        fun getInstance(context: Context): ViewModelFactory {
-              return synchronized(ViewModelFactory::class.java) {
-                        ViewModelFactory(Injection.provideRepository())
-                }
+        fun getInstance(): ViewModelFactory {
+            return synchronized(ViewModelFactory::class.java) {
+                ViewModelFactory(Injection.provideRepository())
+            }
         }
     }
 }

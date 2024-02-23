@@ -2,31 +2,28 @@ package com.example.moviedbapp.ui.details
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.moviedbapp.R
 import com.example.moviedbapp.ViewModelFactory
 import com.example.moviedbapp.data.paging.LoadingStateAdapter
 import com.example.moviedbapp.data.paging.movie.MovieByGenreListAdapter
 import com.example.moviedbapp.data.paging.review.UserReviewListAdapter
-import com.example.moviedbapp.data.response.ReviewResultsItem
 import com.example.moviedbapp.databinding.ActivityMovieDetailBinding
 import com.example.moviedbapp.ui.MovieViewModel
 import com.example.moviedbapp.ui.cutomview.LoadingDialogFragment
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import kotlinx.coroutines.flow.collectLatest
 
 class MovieDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieDetailBinding
 
     private val viewModel by viewModels<MovieViewModel> {
-        ViewModelFactory.getInstance(this)
+        ViewModelFactory.getInstance()
     }
     private lateinit var userReviewListAdapter: UserReviewListAdapter
     private val loadingDialog = LoadingDialogFragment()
@@ -65,11 +62,12 @@ class MovieDetailActivity : AppCompatActivity() {
             binding.tvVoteCount.text = detail.voteCount.toString()
             val voteRating = detail.voteAverage
             val ratingInFloat = String.format("%.1f", voteRating)
-            binding.tvRatingResult.text = ": $ratingInFloat"
-            binding.tvLanguage.text = "Language : ${detail.spokenLanguages?.get(0)?.englishName}"
+            binding.tvRatingResult.text = getString(R.string.rating_in_float, ratingInFloat)
+            binding.tvLanguage.text =
+                getString(R.string.language, detail.spokenLanguages?.get(0)?.englishName)
             binding.tvDescriptionMS.text = detail.overview
             binding.tvTitleDetail.text = detail.title
-            binding.tvRelease.text = "Release : ${detail.releaseDate}"
+            binding.tvRelease.text = getString(R.string.release, detail.releaseDate)
             val genreName = detail.genres?.map { it?.name }?.toTypedArray()
             val sbGenre = StringBuilder()
             for (i in 0 until (genreName?.size ?: 0)) {
@@ -93,7 +91,6 @@ class MovieDetailActivity : AppCompatActivity() {
                 }
             })
         }
-
     }
 
     private fun getReviewData() {

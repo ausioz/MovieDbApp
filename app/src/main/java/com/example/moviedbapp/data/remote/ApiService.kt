@@ -1,14 +1,11 @@
 package com.example.moviedbapp.data.remote
 
-import com.example.moviedbapp.BuildConfig
 import com.example.moviedbapp.data.response.DiscoverMovieResponse
 import com.example.moviedbapp.data.response.MovieDetailResponse
 import com.example.moviedbapp.data.response.MovieGenreResponse
-import com.example.moviedbapp.data.response.ResultsItem
 import com.example.moviedbapp.data.response.UserReviewResponse
 import com.example.moviedbapp.data.response.VideoResponse
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

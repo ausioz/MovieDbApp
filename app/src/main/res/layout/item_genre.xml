@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:text="Genre"
+            android:text="@string/genre"
             android:textSize="20sp"
             android:textStyle="bold" />
     </androidx.appcompat.widget.LinearLayoutCompat>

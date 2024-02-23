@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_genre"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="User"
+            android:text="@string/user"
             android:textSize="20sp"
             android:textStyle="bold" />
         <TextView
@@ -25,8 +26,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Review"
+            android:text="@string/review"
             android:textSize="16sp"
-            android:justificationMode="inter_word"/>
+            android:justificationMode="inter_word"
+            tools:targetApi="o" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </com.google.android.material.card.MaterialCardView>

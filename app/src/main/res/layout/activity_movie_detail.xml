@@ -23,6 +23,7 @@
     </FrameLayout>
 
     <ImageView
+        android:contentDescription="@string/backdrop_image"
         android:id="@+id/iv_backdrop"
         android:layout_width="wrap_content"
         android:layout_height="230dp"
@@ -56,6 +57,7 @@
                 app:layout_constraintTop_toTopOf="@id/clScroll">
 
                 <ImageView
+                    android:contentDescription="@string/poster_detail_image"
                     android:id="@+id/ivPosterDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -72,7 +74,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="17dp"
                 android:maxLines="2"
-                android:text="Title"
+                android:text="@string/title"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/cvPosterDetail"
@@ -85,7 +87,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="3dp"
                 android:maxLines="3"
-                android:text="Genre"
+                android:text="@string/genre"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@id/tvRelease"
                 app:layout_constraintStart_toEndOf="@+id/cvPosterDetail"
@@ -97,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:text="Release :"
+                android:text="@string/release_sample"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@id/tvLanguage"
                 app:layout_constraintStart_toEndOf="@+id/cvPosterDetail"
@@ -109,12 +111,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp"
-                android:text="Language :"
+                android:text="@string/language_sample"
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/cvPosterDetail"
                 app:layout_constraintTop_toBottomOf="@+id/tvRelease" />
 
             <ImageView
+                android:contentDescription="@string/rating_image"
                 android:id="@+id/ivRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -130,13 +133,14 @@
                 android:id="@+id/tvSlash_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="/"
+                android:text="@string/slash"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/ivRating"
                 app:layout_constraintStart_toEndOf="@+id/ivRating"
                 app:layout_constraintTop_toTopOf="@id/ivRating" />
 
             <ImageView
+                android:contentDescription="@string/vote_count_image"
                 android:id="@+id/ivVoteCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -152,7 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text=": 8.5 "
+                android:text="@string/_8_5"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/ivRating"
                 app:layout_constraintStart_toEndOf="@+id/ivVoteCount"
@@ -163,7 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="/"
+                android:text="@string/slash"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/ivRating"
                 app:layout_constraintStart_toEndOf="@+id/tvRatingResult"
@@ -174,7 +178,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="14K "
+                android:text="@string/_14k"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@id/ivRating"
                 app:layout_constraintStart_toEndOf="@+id/tvSlash_2"
@@ -187,13 +191,14 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="26dp"
                 android:justificationMode="inter_word"
-                android:text="Overview"
+                android:text="@string/overview"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cvPosterDetail"/>
+                app:layout_constraintTop_toBottomOf="@id/cvPosterDetail"
+                tools:targetApi="o" />
 
             <TextView
                 android:id="@+id/tvDescriptionMS"
@@ -207,7 +212,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvOverviewMS" />
+                app:layout_constraintTop_toBottomOf="@id/tvOverviewMS"
+                tools:targetApi="o" />
 
             <TextView
                 android:id="@+id/tvReview"
@@ -215,7 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="10dp"
-                android:text="User Reviews"
+                android:text="@string/user_reviews"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/tvDescriptionMS" />
@@ -233,7 +239,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tvNoReview"
                 app:layout_constraintTop_toBottomOf="@id/tvReview"
-                android:text="No review at this moment"
+                android:text="@string/no_review_at_this_moment"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="5dp"
                 android:visibility="gone"

@@ -14,6 +14,7 @@ class UserReviewPagingSource(private val apiService: ApiService, private val mov
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
+
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ReviewResultsItem> {
         return try {
             val position = params.key ?: 1

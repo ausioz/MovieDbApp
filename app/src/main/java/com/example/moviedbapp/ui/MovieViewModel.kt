@@ -8,13 +8,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.moviedbapp.data.MovieRepository
-import com.example.moviedbapp.data.response.DiscoverMovieResponse
-import com.example.moviedbapp.data.response.GenresItem
 import com.example.moviedbapp.data.response.MovieDetailResponse
 import com.example.moviedbapp.data.response.MovieGenreResponse
 import com.example.moviedbapp.data.response.ResultsItem
 import com.example.moviedbapp.data.response.ReviewResultsItem
-import com.example.moviedbapp.data.response.UserReviewResponse
 import com.example.moviedbapp.data.response.VideoResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,9 +30,6 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
 
     private val _movieDetail = MutableLiveData<MovieDetailResponse>()
     val movieDetail: LiveData<MovieDetailResponse> = _movieDetail
-
-//    private val _movieReview = MutableLiveData<UserReviewResponse>()
-//    val movieReview: LiveData<UserReviewResponse> = _movieReview
 
     private val _videoKey = MutableLiveData<String?>()
     val videoKey: LiveData<String?> = _videoKey
@@ -68,7 +62,7 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
         })
     }
 
-    fun getMoviesByGenre(genreId: Int) : LiveData<PagingData<ResultsItem>> {
+    fun getMoviesByGenre(genreId: Int): LiveData<PagingData<ResultsItem>> {
         return repository.getMoviesByGenre(genreId).cachedIn(viewModelScope)
     }
 
@@ -100,14 +94,14 @@ class MovieViewModel(private val repository: MovieRepository) : ViewModel() {
         })
     }
 
-    fun getReview(movieId: Int) :LiveData<PagingData<ReviewResultsItem>>{
+    fun getReview(movieId: Int): LiveData<PagingData<ReviewResultsItem>> {
         return repository.getReviews(movieId).cachedIn(viewModelScope)
     }
 
-    fun getVideoKey(movieId: Int){
+    fun getVideoKey(movieId: Int) {
         _isLoading.value = true
         val client = repository.getVideoKey(movieId)
-        client.enqueue(object : Callback<VideoResponse>{
+        client.enqueue(object : Callback<VideoResponse> {
             override fun onResponse(call: Call<VideoResponse>, response: Response<VideoResponse>) {
                 if (response.isSuccessful) {
                     if (response.body() != null) {

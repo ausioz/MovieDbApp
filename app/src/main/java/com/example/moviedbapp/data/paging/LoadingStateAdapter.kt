@@ -11,11 +11,12 @@ import com.example.moviedbapp.databinding.ItemPagingLoadingBinding
 class LoadingStateAdapter(private val retry: () -> Unit) :
     LoadStateAdapter<LoadingStateAdapter.LoadingStateViewHolder>() {
 
-    class LoadingStateViewHolder (private val binding: ItemPagingLoadingBinding, retry: () -> Unit) :
+    class LoadingStateViewHolder(private val binding: ItemPagingLoadingBinding, retry: () -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
         init {
             binding.retryButton.setOnClickListener { retry.invoke() }
         }
+
         fun bind(loadState: LoadState) {
             if (loadState is LoadState.Error) {
                 binding.errorMsg.text = loadState.error.localizedMessage
@@ -31,10 +32,10 @@ class LoadingStateAdapter(private val retry: () -> Unit) :
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        loadState: LoadState
+        parent: ViewGroup, loadState: LoadState
     ): LoadingStateViewHolder {
-        val binding = ItemPagingLoadingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemPagingLoadingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return LoadingStateViewHolder(binding, retry)
     }
 }
