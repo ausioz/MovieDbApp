@@ -1,13 +1,15 @@
 # MovieDBApp
 
-1. Show List of Genres from https://api.themoviedb.org
-(https://github.com/ausioz/MovieDbApp/assets/25804478/5e444ccb-d1f2-4b19-878e-68b63233d007)
+1. Show the List of Genres from https://api.themoviedb.org
+![1](https://github.com/ausioz/MovieDbApp/assets/25804478/e4d86a29-ea38-4608-9836-78c0c3d71719)
 
 2. Show a List of Movies by Genre chosen
-(https://github.com/ausioz/MovieDbApp/assets/25804478/5299e1a9-0644-4c51-b529-71e727b4c178)
+
+![2](https://github.com/ausioz/MovieDbApp/assets/25804478/8649d915-a98c-4a0c-99ce-d1e677da7afb)
 
 3. Show Movie Detail: Trailer, Poster, Genre, Rating, Overview, and User Reviews
-(https://github.com/ausioz/MovieDbApp/assets/25804478/106b26c5-7a3d-42f3-b64a-c0724b36961c)
+
+![3](https://github.com/ausioz/MovieDbApp/assets/25804478/94616b95-5204-4687-97ad-75658bbe48d4)
 
 4. This App uses MVVM architecture, Android YouTube player library, and Paging 3 to create an endless scroll of movies and reviews
 
