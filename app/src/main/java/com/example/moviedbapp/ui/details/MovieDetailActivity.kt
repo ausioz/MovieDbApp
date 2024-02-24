@@ -73,6 +73,7 @@ class MovieDetailActivity : AppCompatActivity() {
             binding.tvRelease.text = getString(R.string.release, detail.releaseDate)
             val genreName = detail.genres?.map { it?.name }?.toTypedArray()
             val sbGenre = StringBuilder()
+            sbGenre.append(getString(R.string.genre) + ":\n")
             for (i in 0 until (genreName?.size ?: 0)) {
                 sbGenre.append(genreName?.get(i).toString() + "\n")
             }
